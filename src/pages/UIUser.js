@@ -219,7 +219,6 @@ const UIUser = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log("_id",_id)
         UserService.removeUserById(_id)
           .then(() => {
             Swal.fire("สำเร็จ", `ลบผู้ใช้งานสำเร็จ`, "success");

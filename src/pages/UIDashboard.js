@@ -64,11 +64,11 @@ const UIDashboard = () => {
   };
 
   const onFinish = (formValue) => {
-    let { ch_name, link, status } = formValue;
+    let { ch_name, link, ch_id } = formValue;
     let reqData = {};
     if (!isEdit) {
-      reqData = { ch_name, link, status };
-      SystemService.addCh({ ch_name, link, status  })
+      reqData = { ch_name, link, ch_id };
+      SystemService.addCh({ ch_name, link, ch_id  })
         .then(() => {
           setIsModalOpen(false);
           Swal.fire({
@@ -139,28 +139,6 @@ const UIDashboard = () => {
     });
   };
 
-  
-  const dataList = [
-    {
-      createdAt: new Date(2024, 3, 25), 
-      ch_name:"Kira",
-      link:"https://youtu.be/_R2LiwXtuLQ?list=RDMMWuqjrNLNFdo",
-      status: "active",
-    },
-    {
-      createdAt: new Date(2024, 3, 24),
-      ch_name:"Imsogood",
-      link:"https://youtu.be/1231?list=123213",
-      status: "pending",
-    },
-    {
-      createdAt: new Date(2024, 3, 24),
-      ch_name:"Ppl",
-      link:"https://youtu.be/",
-      status: "success",
-    },
-  ];
-  
 
   const column = [
     {
@@ -176,6 +154,11 @@ const UIDashboard = () => {
       title: "Channel Name",
       dataIndex: "ch_name",
       key: "ch_name",
+    },
+    {
+      title: "Channel ID",
+      dataIndex: "ch_id",
+      key: "ch_id",
     },
     {
       title: "Link",
@@ -319,20 +302,16 @@ const UIDashboard = () => {
           </Form.Item>
 
           <Form.Item
-            label="Status"
-            name="status"
+            label="Youtube ID"
+            name="ch_id"
             rules={[
               {
                 required: true,
-                message: "Please select a status!",
+                message: "Please input your youtube channel id!",
               },
             ]}
           >
-              <Select>
-                <Option value="pending">Pending</Option>
-                <Option value="active">Active</Option>
-                <Option value="success">Success</Option>
-              </Select>
+            <Input/>
           </Form.Item>
 
           <Divider />

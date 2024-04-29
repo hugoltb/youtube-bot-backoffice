@@ -17,6 +17,12 @@ export const nav = [
     path: "/dashboard",
   },
   {
+    key: "2",
+    icon: <AppstoreOutlined className="icon-menubar" />,
+    label: "Keywords",
+    path: "/keywords",
+  },
+  {
     key: "3",
     icon: <TeamOutlined className="icon-menubar" />,
     label: "Users",

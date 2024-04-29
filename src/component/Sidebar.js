@@ -10,7 +10,6 @@ import miniLogo from "assets/icon/bot.png";
 const { Sider } = Layout;
 
 const NavBar = ({ collapsed }) => {
-  const usRole = STORAGE.GET("role");
   const usName = STORAGE.GET("username");
   const location = useLocation();
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);

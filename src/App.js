@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 // === PAGE === //
 import UIDashboard from "./pages/UIDashboard";
 import UIUser from "./pages/UIUser";
+import UIKeywords from "./pages/UIKeywords";
 
 import Login from "./pages/UILogin";
 
@@ -20,7 +21,7 @@ function App() {
         <Route path="/*" element={<NotFound />} />
         <Route element={<AuthLayout />}>
           <Route path="/dashboard" element={<UIDashboard />} />
-
+          <Route path="/keywords" element={<UIKeywords />} />
           <Route path="/users" element={<UIUser />} />
 
         </Route>

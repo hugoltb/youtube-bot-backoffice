@@ -5,6 +5,8 @@ import { API_URL, STORAGE } from "utils/utils";
 const ENDPOINT = {
   GET_YT_CH: `${API_URL}/youtube-ch`,
   ADD_CH: `${API_URL}/youtube-ch`,
+  GET_KEYWORD: `${API_URL}/config?key=keyword`,
+  PATCH_KEYWORD: `${API_URL}/config`,
   DELETE_CH: (chId) => `${API_URL}/youtube-ch/${chId}`,
   AUTH: {
     SIGN_IN: `${API_URL}/user/login`,
@@ -24,6 +26,23 @@ const SystemService = {
     return axios({
       method: METHOD.POST,
       url: ENDPOINT.ADD_CH,
+      headers: { Authorization: `${STORAGE.GET("token")}` },
+      data,
+    });
+  },
+
+  getKeyword: () => {
+    return axios({
+      method: METHOD.GET,
+      url: ENDPOINT.GET_KEYWORD,
+      headers: { Authorization: `${STORAGE.GET("token")}` },
+    });
+  },
+
+  patchKeyword: (data) => {
+    return axios({
+      method: METHOD.PATCH,
+      url: ENDPOINT.PATCH_KEYWORD,
       headers: { Authorization: `${STORAGE.GET("token")}` },
       data,
     });
