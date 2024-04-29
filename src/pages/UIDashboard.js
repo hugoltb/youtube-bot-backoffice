@@ -126,7 +126,6 @@ const UIDashboard = () => {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log("_id",_id)
         SystemService.removeChById(_id)
           .then(() => {
             Swal.fire("สำเร็จ", `ลบข้อมูลสำเร็จ`, "success");

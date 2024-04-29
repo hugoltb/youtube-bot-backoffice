@@ -33,9 +33,7 @@ const UIKeywords = () => {
     setTimeout(() => {
       SystemService.getKeyword()
       .then(({ data }) => {
-        // setTags(data.value);
-        const tagsArray = JSON.parse(data.value.replace(/'/g, '"'));
-        setTags(tagsArray);
+        setTags(data.value);
       })
       .catch(() => {
       });
@@ -56,9 +54,17 @@ const UIKeywords = () => {
     setInputValue(e.target.value);
   };
 
+  // const handleInputConfirm = () => {
+  //   if (inputValue && !tags.includes(inputValue)) {
+  //     setTags([...tags, inputValue]);
+  //   }
+  //   setInputVisible(false);
+  //   setInputValue('');
+  // };
+
   const handleInputConfirm = () => {
-    if (inputValue && !tags.includes(inputValue)) {
-      setTags([...tags, inputValue]);
+    if (inputValue && !tags?.includes(inputValue)) {
+      setTags((prevTags) => [...prevTags, inputValue]); // Use functional update to ensure tags is always an array
     }
     setInputVisible(false);
     setInputValue('');
@@ -81,11 +87,13 @@ const UIKeywords = () => {
     setEditInputValue('');
   };
 
+  
+
   const handleSave = () => {
     const valueString = '[' + tags.map(tag => `'${tag}'`).join(',') + ']';
     const data = {
       key: 'keyword',
-      value: valueString,
+      value: JSON.stringify(tags.map(tag => String(tag))),
     };
     SystemService.patchKeyword(data)
       .then(() => {
@@ -98,6 +106,7 @@ const UIKeywords = () => {
 
   return (
     <div>
+      {console.log(tags)}
       <div
         style={{
           display: "flex",
