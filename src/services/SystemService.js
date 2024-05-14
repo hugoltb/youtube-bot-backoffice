@@ -9,7 +9,7 @@ const ENDPOINT = {
   PATCH_KEYWORD: `${API_URL}/config`,
   DELETE_CH: (chId) => `${API_URL}/youtube-ch/${chId}`,
   AUTH: {
-    SIGN_IN: `${API_URL}/user/login`,
+    SIGN_IN: `${API_URL}/auth/sign-in`,
   },
 };
 
