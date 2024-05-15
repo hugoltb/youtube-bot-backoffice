@@ -1,4 +1,4 @@
-import { Col, Row, Table, Button, Tag,Form,Modal,Input,Divider,Space,Select } from "antd";
+import { Col, Row, Table, Button, Tag,Form,Modal,Input,Divider,Space,Select,Switch } from "antd";
 import React, { useState, useEffect } from 'react';
 import {
   formatDateTime,
@@ -64,11 +64,11 @@ const UIDashboard = () => {
   };
 
   const onFinish = (formValue) => {
-    let { ch_name, link, ch_id } = formValue;
+    let { ch_name, link, ch_id, is_new, max_view_per_video } = formValue;
     let reqData = {};
     if (!isEdit) {
-      reqData = { ch_name, link, ch_id };
-      SystemService.addCh({ ch_name, link, ch_id  })
+      reqData = { ch_name, link, ch_id, is_new, max_view_per_video };
+      SystemService.addCh({ ch_name, link, ch_id, is_new, max_view_per_video  })
         .then(() => {
           setIsModalOpen(false);
           Swal.fire({
@@ -93,7 +93,7 @@ const UIDashboard = () => {
         .then((res) => {
           Swal.fire({
             title: "สำเร็จ!",
-            text: "แก้ไขผู้ใช้งานสำเร็จ",
+            text: "แก้ไขสำเร็จ",
             icon: "success",
           });
           fetchChannel();
@@ -168,6 +168,28 @@ const UIDashboard = () => {
           {link}
         </a>
       ),
+    },
+    {
+      title: "New Channel",
+      dataIndex: "is_new",
+      key: "is_new",
+      align:"center",
+      render: (is_new) => (
+        is_new ? (
+          <Tag color="green">
+            New
+          </Tag>
+        ) : (
+          <>
+            -
+          </>
+        )
+      ),
+    },
+    {
+      title: "Max views",
+      dataIndex: "max_view_per_video",
+      key: "max_view_per_video",
     },
     {
       title: "STATUS",
@@ -311,6 +333,26 @@ const UIDashboard = () => {
             ]}
           >
             <Input/>
+          </Form.Item>
+          
+          <Form.Item
+            label="New Channel"
+            name="is_new"
+          >
+            <Switch />
+          </Form.Item>
+
+          <Form.Item
+            label="Max views"
+            name="max_view_per_video"
+            rules={[
+              {
+                required: true,
+                message: "Please input your max views!",
+              },
+            ]}
+          >
+            <Input type="number"/>
           </Form.Item>
 
           <Divider />

@@ -3,11 +3,11 @@ import { METHOD } from "context/constant";
 import { API_URL, STORAGE } from "utils/utils";
 
 const ENDPOINT = {
-  GET_YT_CH: `${API_URL}/youtube-ch`,
-  ADD_CH: `${API_URL}/youtube-ch`,
+  GET_YT_CH: `${API_URL}/youtube/channel`,
+  ADD_CH: `${API_URL}/youtube/channel`,
   GET_KEYWORD: `${API_URL}/config?key=keyword`,
   PATCH_KEYWORD: `${API_URL}/config`,
-  DELETE_CH: (chId) => `${API_URL}/youtube-ch/${chId}`,
+  DELETE_CH: (chId) => `${API_URL}/youtube/channel/${chId}`,
   AUTH: {
     SIGN_IN: `${API_URL}/auth/sign-in`,
   },
