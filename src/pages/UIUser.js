@@ -75,11 +75,11 @@ const UIUser = () => {
   };
 
   const onFinish = (formValue) => {
-    let { email, password } = formValue;
+    let { username, password } = formValue;
     let reqData = {};
     if (!isEdit) {
-      reqData = { email, password };
-      UserService.addUser({ email, password  })
+      reqData = { username, password };
+      UserService.addUser({ username, password  })
         .then(() => {
           setIsModalOpen(false);
           Swal.fire({
@@ -125,7 +125,7 @@ const UIUser = () => {
     setIsModalOpen(true);
     setCurrentUser(record);
 
-    form.setFieldValue("email", record?.email);
+    form.setFieldValue("username", record?.username);
   };
 
   const columns = [
@@ -135,11 +135,11 @@ const UIUser = () => {
       render: (text, record, idx) => (page - 1) * 10 + (idx + 1),
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      render: (email) => (
-        <span style={{ color: "#29f", fontWeight: "bold" }}>{email}</span>
+      title: "Username",
+      dataIndex: "username",
+      key: "username",
+      render: (username) => (
+        <span style={{ color: "#29f", fontWeight: "bold" }}>{username}</span>
       ),
     },
     {
@@ -335,12 +335,12 @@ const UIUser = () => {
           autoComplete="off"
         >
           <Form.Item
-            label="Email"
-            name="email"
+            label="Username"
+            name="username"
             rules={[
               {
                 required: true,
-                message: "Please input your email!",
+                message: "Please input your username!",
               },
             ]}
           >

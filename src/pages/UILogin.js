@@ -19,7 +19,7 @@ const Login = () => {
           // STORAGE.SET("token", "asdasdasda");
           // navigate("/dashboard");
           let reqData = {
-      email: values.username,
+      username: values.username,
       password: values.password,
     };
     SystemService.userLogin(reqData)
@@ -27,7 +27,7 @@ const Login = () => {
         if (data.token) {
           let access_token = data.token;
           let payload = jwtDecode(access_token);
-          STORAGE.SET("username", payload.email);
+          STORAGE.SET("username", payload.username);
           STORAGE.SET("expired", payload.exp);
           STORAGE.SET("token", access_token);
           navigate("/dashboard");
@@ -115,11 +115,11 @@ const Login = () => {
                       rules={[
                         {
                           required: true,
-                          message: "Please enter your email!",
+                          message: "Please enter your username!",
                         },
                       ]}
                     >
-                      <Input placeholder="Email" style={{ width: "100%" }} />
+                      <Input placeholder="Username" style={{ width: "100%" }} />
                     </Form.Item>
                     <Form.Item
                       name="password"

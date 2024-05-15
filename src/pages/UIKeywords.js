@@ -1,15 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Tag, Input, Tooltip, Card, Button } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import React, { useState, useRef, useEffect } from "react";
+import { Tag, Input, Tooltip, Card, Button, message } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 import SystemService from "services/SystemService";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 const UIKeywords = () => {
   const [tags, setTags] = useState();
   const [inputVisible, setInputVisible] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [editInputIndex, setEditInputIndex] = useState(-1);
-  const [editInputValue, setEditInputValue] = useState('');
+  const [editInputValue, setEditInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const inputRef = useRef(null);
   const editInputRef = useRef(null);
@@ -17,7 +17,7 @@ const UIKeywords = () => {
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   useEffect(() => {
     if (inputVisible) {
       inputRef.current?.focus();
@@ -28,17 +28,15 @@ const UIKeywords = () => {
     editInputRef.current?.focus();
   }, [editInputValue]);
 
-
   const fetchData = () => {
     setTimeout(() => {
       SystemService.getKeyword()
-      .then(({ data }) => {
-        setTags(data.value);
-      })
-      .catch(() => {
-      });
-      setIsLoading(false); 
-    }, 1000); 
+        .then(({ data }) => {
+          setTags(data.value);
+        })
+        .catch(() => {});
+      setIsLoading(false);
+    }, 1000);
   };
 
   const handleClose = (removedTag) => {
@@ -63,11 +61,15 @@ const UIKeywords = () => {
   // };
 
   const handleInputConfirm = () => {
+    if (!inputValue) return message.error("Error input is null");
     if (inputValue && !tags?.includes(inputValue)) {
       setTags((prevTags) => [...prevTags, inputValue]); // Use functional update to ensure tags is always an array
+      handleSave();
+    } else {
+      message.error("Error duplicate value");
     }
     setInputVisible(false);
-    setInputValue('');
+    setInputValue("");
   };
 
   const handleEditInputChange = (e) => {
@@ -75,7 +77,7 @@ const UIKeywords = () => {
   };
 
   const handleEditInputConfirm = () => {
-    if (editInputValue.trim() === '') {
+    if (editInputValue.trim() === "") {
       const newTags = tags.filter((tag, index) => index !== editInputIndex);
       setTags(newTags);
     } else {
@@ -84,16 +86,14 @@ const UIKeywords = () => {
       setTags(newTags);
     }
     setEditInputIndex(-1);
-    setEditInputValue('');
+    setEditInputValue("");
   };
 
-  
-
   const handleSave = () => {
-    const valueString = '[' + tags.map(tag => `'${tag}'`).join(',') + ']';
+    const valueString = "[" + tags.map((tag) => `'${tag}'`).join(",") + "]";
     const data = {
-      key: 'keyword',
-      value: JSON.stringify(tags.map(tag => String(tag))),
+      key: "keyword",
+      value: JSON.stringify(tags.map((tag) => String(tag))),
     };
     SystemService.patchKeyword(data)
       .then(() => {
@@ -106,7 +106,6 @@ const UIKeywords = () => {
 
   return (
     <div>
-      {console.log(tags)}
       <div
         style={{
           display: "flex",
@@ -116,80 +115,92 @@ const UIKeywords = () => {
       >
         <h1 style={{ margin: "0", fontSize: "18px" }}>Keywords Management</h1>
       </div>
-      {!isLoading && (      <Card className="card-dashboard" style={{ marginTop: "20px" }}>
-      {Array.isArray(tags) && tags.map((tag, index) => {
-        if (editInputIndex === index) {
-          return (
+      {!isLoading && (
+        <Card className="card-dashboard" style={{ marginTop: "20px" }}>
+          {Array.isArray(tags) &&
+            tags.map((tag, index) => {
+              if (editInputIndex === index) {
+                return (
+                  <Input
+                    style={{
+                      width: "160px",
+                      height: "32px",
+                      marginRight: "8px",
+                    }}
+                    ref={editInputRef}
+                    key={tag}
+                    size="small"
+                    value={editInputValue}
+                    onChange={handleEditInputChange}
+                    onBlur={handleEditInputConfirm}
+                    onPressEnter={handleEditInputConfirm}
+                  />
+                );
+              }
+              const isLongTag = tag.length > 20;
+              const tagElem = (
+                <Tag
+                  key={tag}
+                  closable
+                  onClose={() => handleClose(tag)}
+                  className="tag-l"
+                >
+                  <span
+                    onDoubleClick={(e) => {
+                      setEditInputIndex(index);
+                      setEditInputValue(tag);
+                      e.preventDefault();
+                    }}
+                  >
+                    {isLongTag ? `${tag.slice(0, 20)}...` : tag}
+                  </span>
+                </Tag>
+              );
+              return isLongTag ? (
+                <Tooltip title={tag} key={tag}>
+                  {tagElem}
+                </Tooltip>
+              ) : (
+                tagElem
+              );
+            })}
+          {inputVisible ? (
             <Input
-              style={{width:"160px",height:"32px",marginRight:"8px"}}
-              ref={editInputRef}
-              key={tag}
+              style={{ width: "160px", height: "32px" }}
+              ref={inputRef}
+              type="text"
               size="small"
-              value={editInputValue}
-              onChange={handleEditInputChange}
-              onBlur={handleEditInputConfirm}
-              onPressEnter={handleEditInputConfirm}
+              value={inputValue}
+              onChange={handleInputChange}
+              onPressEnter={handleInputConfirm}
             />
-          );
-        }
-        const isLongTag = tag.length > 20;
-        const tagElem = (
-          <Tag
-            key={tag}
-            closable
-            onClose={() => handleClose(tag)}
-            className='tag-l'
-          >
-            <span
-              onDoubleClick={(e) => {
-                  setEditInputIndex(index);
-                  setEditInputValue(tag);
-                  e.preventDefault();
-              }}
+          ) : (
+            <Tag
+              className="tag-l"
+              color="blue"
+              icon={<PlusOutlined />}
+              onClick={showInput}
+              style={{ cursor: "pointer" }}
             >
-              {isLongTag ? `${tag.slice(0, 20)}...` : tag}
-            </span>
-          </Tag>
-        );
-        return isLongTag ? (
-          <Tooltip title={tag} key={tag}>
-            {tagElem}
-          </Tooltip>
-        ) : (
-          tagElem
-        );
-      })}
-      {inputVisible ? (
-        <Input
-          style={{width:"160px",height:"32px"}}
-          ref={inputRef}
-          type="text"
-          size="small"
-          value={inputValue}
-          onChange={handleInputChange}
-          onBlur={handleInputConfirm}
-          onPressEnter={handleInputConfirm}
-        />
-      ) : (
-        <Tag className='tag-l' color='blue' icon={<PlusOutlined />} onClick={showInput} style={{cursor:"pointer"}}>
-          Add Keyword
-        </Tag>
+              Add Keyword
+            </Tag>
+          )}
+          <br />
+          <Button
+            type="primary"
+            onClick={handleInputConfirm}
+            style={{
+              width: "100%",
+              maxWidth: "120px",
+              marginTop: "20px",
+              float: "right",
+            }}
+          >
+            Save
+          </Button>
+        </Card>
       )}
-      <br/>
-      <Button
-          type="primary"
-          onClick={handleSave}
-          style={{ width: "100%", maxWidth: "120px",marginTop:"20px",float:"right" }}
-        >
-          Save
-        </Button>
-      </Card>)}
-
-
-
     </div>
-
-
   );
 };
 
